@@ -1,3 +1,3 @@
 # DataStructures
 
-High performance generic Datastructrues written purely in C.
+High performance generic Datastructures written purely in C.
