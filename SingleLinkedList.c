@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-#include "singlelinkedlist.h"
+#include "SingleLinkedList.h"
 
 //create and return Node in the heap
 static Snode* CreateNode(SlinkedList* x, void* elementAddress, Snode* next){
