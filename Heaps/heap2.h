@@ -1,5 +1,5 @@
 /** 
- * File: heaps1.h
+ * File: heaps2.h
  * ---------------
  * Defines the interface for the heaps.
  *
