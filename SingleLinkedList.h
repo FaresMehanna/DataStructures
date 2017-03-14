@@ -33,8 +33,7 @@ typedef int (*CompareFunction) (void*,void*);
  * FreeFunction is pointer to client-supplied function to free the items
  * When dispose the Heap or when element need to be freed. the function will
  * recieve one element at time and it's job to free it. client will need to use it 
- * with all variable, client will send free() if it's simple datatype or spescific
- * free function if it's sphesticated structure
+ * with all malloced variable, client will send NULL if it's in the stack
  */
 typedef void (*FreeFunction) (void*);
 
@@ -91,7 +90,7 @@ typedef struct SIterator{
  *
  * x => pointer to the SingleLinkedList
  * elementSize => the number of bytes for each element in the list
- * FreeFunction => the function which will be used to free items, free() if items
+ * FreeFunction => the function which will be used to free items, NULL if items
  * is simple type as int,long,char,...
  */
 void InitializeSLinkedList(SlinkedList* x, int elementSize, FreeFunction);	//O(1)

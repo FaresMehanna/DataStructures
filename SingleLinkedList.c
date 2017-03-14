@@ -24,6 +24,7 @@ static void FreeNode(SlinkedList* x, Snode* node){
 	if(x->freeFN != NULL)
 		x->freeFN(node->element);
 
+	free(node->element);
 	free(node);
 }
 
