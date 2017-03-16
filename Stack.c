@@ -44,7 +44,6 @@ void InitializeStack(Stack* x, int elementSize, FreeFunction freeFN){
 
 	first->next =  NULL;
 	first->element =  NULL;
-
 	//make the head and the end point to the sentail node
 	x->head = first;
 }
@@ -68,7 +67,6 @@ void StackPush(Stack* x,void* elementAddress){
 	Stacknode* firstNode = x->head;
 	//create Node pointing to the first node
 	Stacknode* element = CreateNode(x,elementAddress,firstNode->next);
-
 	//fix the head node and increase the size
 	firstNode->next = element;
 	x->size++;
@@ -107,6 +105,7 @@ int StackPop(Stack* x, void* targetAddress){
 void* StackGetIterator(Stack* x){
 	//mallocate Iterator and initalize it
 	StackIterator* y = malloc(sizeof(StackIterator));
+	assert(y != NULL);
 	y->node = x->head;
 	y->list = x;
 	return y;	//return pointer to the iterator
