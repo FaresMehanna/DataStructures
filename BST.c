@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-#include "BST2.h"
+#include "BST.h"
 
 
 static BSTnode* MakeNode(BSTTree* y, void* data, void* key, BSTnode* right, BSTnode* left){
@@ -565,6 +565,7 @@ void BSTIteratorDispose(void* Iterator){
 	//free the iterator
 	BSTIterator* y = (BSTIterator *) Iterator;
 
+	y->stack->Free(y->stack);
 	free(y->stack);
 	free(y);
 }
