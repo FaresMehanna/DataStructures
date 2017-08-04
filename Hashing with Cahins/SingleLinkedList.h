@@ -4,7 +4,7 @@
  * Defines the interface for the Single Linked List.
  *
  * This version of the Linked List allow the client to add generic item
- * to a signle list in Front or Back in constatn time .
+ * to a signle list in Front or Back in constant time .
  * Extract data from front in O(1) and from back in O(N).
  * this DataStructure support Iterators
  */
@@ -31,7 +31,7 @@ typedef int (*CompareFunction) (void*,void*);
  * Defines the Function needed to free the List's element when needed
  *
  * FreeFunction is pointer to client-supplied function to free the items
- * When dispose the Heap or when element need to be freed. the function will
+ * When dispose the List or when element need to be freed. the function will
  * recieve one element at time and it's job to free it. client will need to use it 
  * with all malloced variable, client will send NULL if it's in the stack
  */
@@ -43,7 +43,7 @@ typedef void (*FreeFunction) (void*);
  * ---------------
  * Defines the Struct needed for the Single node
  *
- * Each node will have two field, pointe to the data and pointer to the
+ * Each node will have two field, pointer to the data and pointer to the
  * next node 
  */
 typedef struct Snode{
@@ -57,7 +57,7 @@ typedef struct Snode{
  * Defines the Struct needed for the Single Linked List
  *
  * size => size of the linked List
- * elemsize => the size in Byte for each element in the lsit
+ * elemsize => the size in Byte for each element in the list
  * freeFN => pointer to client supplied function used when freeing the elements
  * head => pointer to dummy node at the head
  * end => pointer to last node in the List
@@ -293,4 +293,5 @@ void SLinkedListIteratorGoNext(void* Iterator);	//O(1)
  * it will use free() to free the pointer data
  */
 void SLinkedListIteratorDispose(void* Iterator);	//O(1)
+
 #endif

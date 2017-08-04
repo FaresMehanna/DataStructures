@@ -7,7 +7,8 @@
  * to a Tree and do other operation in O(h) .
  * this DataStructure Doesn't use Parent pointer in every node
  * this DataStructure Doesn't recursion functions
- * this DataStructure support 1-Iterators to traverse the Tree - In Order */
+ * this DataStructure support 1-Iterators to traverse the Tree - In Order 
+ */
 #ifndef _BSTTree_
 #define _BSTTree_
 

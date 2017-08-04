@@ -106,6 +106,7 @@ void* StackGetIterator(Stack* x){
 	//mallocate Iterator and initalize it
 	StackIterator* y = malloc(sizeof(StackIterator));
 	assert(y != NULL);
+	
 	y->node = x->head;
 	y->list = x;
 	return y;	//return pointer to the iterator

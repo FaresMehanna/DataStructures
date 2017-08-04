@@ -8,8 +8,12 @@
 static Snode* CreateNode(SlinkedList* x, void* elementAddress, Snode* next){
 	//malloc the node
 	Snode* element = (Snode *) malloc(sizeof(Snode));
+	assert(element != NULL);
+
 	//malloc space foe the data in the node
 	element->element = (void *) malloc(x->elemsize);
+	assert(element->element != NULL);
+
 	//write the data in the Node
 	memcpy(element->element, elementAddress, x->elemsize);
 	//set the node next
@@ -28,6 +32,21 @@ static void FreeNode(SlinkedList* x, Snode* node){
 	free(node);
 }
 
+//free the node and it's data
+static void FreeNodeOnly(SlinkedList* x, Snode* node){
+	//Don't use the user supplied function
+	//if(x->freeFN != NULL)
+	//	x->freeFN(node->element);
+
+	free(node->element);
+	free(node);
+}
+
+//free the node and it's data
+static void OFreeNode(SlinkedList* x, Snode* node){
+	free(node);
+}
+
 void InitializeSLinkedList(SlinkedList* x, int elementSize, FreeFunction freeFN){
 	//initialize the linkedlist
 	x->elemsize = elementSize;
@@ -36,6 +55,8 @@ void InitializeSLinkedList(SlinkedList* x, int elementSize, FreeFunction freeFN)
 
 	//make sential node at the head
 	Snode* first = (Snode *)malloc(sizeof(Snode));
+	assert(first != NULL);
+
 	first->next =  NULL;
 	first->element =  NULL;
 
@@ -48,9 +69,12 @@ void DisposeSLinkedList(SlinkedList* x){
 	Snode* It = x->head;
 
 	//Free every Node
-	for(int i=-1;i<SLinkedListSize(x);i++){
+	for(int i=0;i<SLinkedListSize(x)+1;i++){
 		Snode* nex = It->next;
-		FreeNode(x,It);
+		if(i == 0)
+			OFreeNode(x,It);
+		else
+			FreeNode(x,It);
 		It = nex;
 	}
 }
@@ -75,9 +99,14 @@ void SLinkedListAddFront(SlinkedList* x,void* elementAddress){
 }
 
 void SLinkedListRemoveFront(SlinkedList* x){
+
 	//if there is no data just return
 	if(SLinkedListSize(x) == 0)
 		return;
+
+	//fix the end pointer
+	if(SLinkedListSize(x) == 1)
+		x->end = x->head;
 
 	//else free the node and fix the pointers and decrease the size
 	Snode* temp = x->head->next->next;
@@ -86,7 +115,28 @@ void SLinkedListRemoveFront(SlinkedList* x){
 	x->size--;
 }
 
+static inline void SLinkedListRemoveFrontOnly(SlinkedList* x){
+
+	//if there is no data just return
+	if(SLinkedListSize(x) == 0)
+		return;
+
+	//fix the end pointer
+	if(SLinkedListSize(x) == 1)
+		x->end = x->head;
+
+	//else free the node and fix the pointers and decrease the size
+	Snode* temp = x->head->next->next;
+	FreeNodeOnly(x,x->head->next);
+	x->head->next = temp;
+	x->size--;
+}
+
 void SLinkedListPeekFront(SlinkedList* x, void* targetAddress){
+	//if there is no data just return
+	if(SLinkedListSize(x) == 0)
+		return;
+	
 	//copy the data to pointer
 	memcpy(targetAddress,x->head->next->element,x->elemsize);
 }
@@ -94,7 +144,7 @@ void SLinkedListPeekFront(SlinkedList* x, void* targetAddress){
 void SLinkedListExtractFront(SlinkedList* x, void* targetAddress){
 	//write the data then remove it
 	SLinkedListPeekFront(x,targetAddress);
-	SLinkedListRemoveFront(x);
+	SLinkedListRemoveFrontOnly(x);
 }
 
 void SLinkedListAddBack(SlinkedList* x, void* elementAddress){
@@ -127,6 +177,24 @@ void SLinkedListRemoveBack(SlinkedList* x){
 	x->size--;
 }
 
+static inline void SLinkedListRemoveBackOnly(SlinkedList* x){
+	//if there is no nodes just return
+	if(SLinkedListSize(x) == 0)
+		return;
+
+	//else get to the wanted node
+	Snode* curr = x->head;
+	while(curr->next != x->end){
+		curr = curr->next;
+	}
+
+	//free it and fix the end pointer
+	FreeNodeOnly(x,curr->next);
+	curr->next = NULL;
+	x->end = curr;
+	x->size--;
+}
+
 void SLinkedListPeekBack(SlinkedList* x, void* targetAddress){
 	//write the data to the address given
 	memcpy(targetAddress,x->end->element,x->elemsize);
@@ -135,7 +203,7 @@ void SLinkedListPeekBack(SlinkedList* x, void* targetAddress){
 void SLinkedListExtractBack(SlinkedList* x, void* targetAddress){
 	//write the data then rmeove the data
 	SLinkedListPeekBack(x,targetAddress);
-	SLinkedListRemoveBack(x);
+	SLinkedListRemoveBackOnly(x);
 }
 
 void SLinkedListGet(SlinkedList* x, int index, void* targetAddress){
@@ -155,6 +223,11 @@ void SLinkedListRemove(SlinkedList* x, int index){
 	//if the index bigger than or equal the list, return
 	if(index >= SLinkedListSize(x))
 		return;
+	//fix the start and end pointers
+	if(index == 0)
+		return SLinkedListRemoveFront(x);
+	else if(index == SLinkedListSize(x)-1)
+		return SLinkedListRemoveBack(x);
 	//else go to the node wanted
 	Snode* curr = x->head;
 	for(int i=0;i<index;i++){
@@ -204,6 +277,8 @@ int SLinkedListSearch(SlinkedList* x, void* keyAddress, CompareFunction cmpFN){
 void* SLinkedListGetIterator(SlinkedList* x){
 	//mallocate Iterator and initalize it
 	SIterator* y = malloc(sizeof(SIterator));
+	assert(y != NULL);
+
 	y->node = x->head;
 	y->list = x;
 	return y;	//return pointer to the iterator

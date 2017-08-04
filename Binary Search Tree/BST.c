@@ -8,9 +8,16 @@
 static BSTnode* MakeNode(BSTTree* y, void* data, void* key, BSTnode* right, BSTnode* left){
 	//create the node
 	BSTnode* x = malloc(sizeof(BSTnode));
+	assert(x != NULL);
+
 	//create the data and key space
 	x->data = malloc(y->elemsize);
+	assert(x->data != NULL);
+
 	x->key = malloc(y->keysize);
+	assert(x->key != NULL);
+
+
 	//set the data and the key
 	memcpy(x->data,data,y->elemsize);
 	memcpy(x->key,key,y->keysize);
@@ -36,6 +43,8 @@ static BSTnodeparent* BSTNodeGetMax(BSTnode* x){
 		if(root->right == NULL){
 			
 			BSTnodeparent* toReturn = malloc(sizeof(BSTnodeparent));
+			assert(toReturn != NULL);
+
 			toReturn->node = root;
 			toReturn->parent = parent;
 
@@ -66,6 +75,8 @@ static BSTnodeparent* BSTNodeGetMin(BSTnode* x){
 		if(root->left == NULL){
 
 			BSTnodeparent* toReturn = malloc(sizeof(BSTnodeparent));
+			assert(toReturn != NULL);
+
 			toReturn->node = root;
 			toReturn->parent = parent;
 
@@ -181,6 +192,8 @@ static void BSTInitializeStack(BSTStack* x,int elemsize){
 	x->size = 0;
 	x->actuallength = 4;
 	x->stack = malloc(elemsize * 4);
+	assert(x->stack != NULL);
+
 	x->Push = BSTPush;
 	x->Pop = BSTPop;
 	x->Free = BSTStackFree;
@@ -508,9 +521,12 @@ int BSTTreeGetMin(BSTTree* x, void* targetAddress){
 void* BSTGetIterator(BSTTree* x){
 	//mallocate Iterator and initalize it
 	BSTIterator* y = malloc(sizeof(BSTIterator));
+	assert(y != NULL);
+
 	y->node = x->root;
 	y->tree = x;
 	y->stack = malloc(sizeof(BSTStack));
+	assert(y->stack != NULL);
 
 	BSTInitializeStack((y->stack),sizeof(BSTnode *));
 
@@ -568,4 +584,9 @@ void BSTIteratorDispose(void* Iterator){
 	y->stack->Free(y->stack);
 	free(y->stack);
 	free(y);
+}
+
+int main(){
+
+	return 0;
 }
