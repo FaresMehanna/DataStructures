@@ -19,8 +19,14 @@ static inline unsigned int getHash(void* key, int keysize, long long max){
 static inline DataKey* createDataKey(HashSetChain* x ,void* key ,void* elementAddress){
 	//create the pair
 	DataKey* y = malloc(sizeof(DataKey));
+	assert(y != NULL);
+
 	y->data = malloc(x->elemsize);
+	assert(y->data != NULL);
+
 	y->key = malloc(x->keysize);
+	assert(y->key != NULL);
+
 	//set the data
 	memcpy (y->data,elementAddress,x->elemsize);
 	memcpy (y->key,key,x->keysize);
@@ -106,9 +112,13 @@ static inline void GrowHashSetChain(HashSetChain* x){
 	SlinkedList** old = x->data;
 	//make the new array of pointers
 	x->data = malloc(sizeof(SlinkedList*) * x->actualsize);
+	assert(x->data != NULL);
+
 	//create the lists for the new array
 	for(int i=0;i<x->actualsize;i++){
 		(x->data)[i] = malloc(sizeof(SlinkedList));
+		assert((x->data)[i] != NULL);
+
 		InitializeSLinkedList((x->data)[i],sizeof(DataKey*),freeKeySLinkedList);
 	}
 
@@ -155,9 +165,13 @@ void InitializeHashSetChain(HashSetChain* x, int dataSize, int keySize, CompareF
 	x->keysize = keySize;
 	//the array holding the pointers to the linkedlists
 	x->data = malloc(sizeof(SlinkedList*) * 8);
+	assert((x->data) != NULL);
+
 	//malloc the LinkedLists
 	for(int i=0;i<8;i++){
 		(x->data)[i] = malloc(sizeof(SlinkedList));
+		assert((x->data)[i] != NULL);
+
 		InitializeSLinkedList((x->data)[i],sizeof(DataKey*),freeKeySLinkedList);
 	}
 	x->datafreeFN = datafreeFN;

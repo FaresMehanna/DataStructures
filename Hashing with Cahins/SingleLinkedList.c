@@ -8,8 +8,12 @@
 static Snode* CreateNode(SlinkedList* x, void* elementAddress, Snode* next){
 	//malloc the node
 	Snode* element = (Snode *) malloc(sizeof(Snode));
+	assert(element != NULL);
+
 	//malloc space foe the data in the node
 	element->element = (void *) malloc(x->elemsize);
+	assert(element->element != NULL);
+
 	//write the data in the Node
 	memcpy(element->element, elementAddress, x->elemsize);
 	//set the node next
@@ -51,6 +55,8 @@ void InitializeSLinkedList(SlinkedList* x, int elementSize, FreeFunction freeFN)
 
 	//make sential node at the head
 	Snode* first = (Snode *)malloc(sizeof(Snode));
+	assert(first != NULL);
+
 	first->next =  NULL;
 	first->element =  NULL;
 
@@ -271,6 +277,8 @@ int SLinkedListSearch(SlinkedList* x, void* keyAddress, CompareFunction cmpFN){
 void* SLinkedListGetIterator(SlinkedList* x){
 	//mallocate Iterator and initalize it
 	SIterator* y = malloc(sizeof(SIterator));
+	assert(y != NULL);
+
 	y->node = x->head;
 	y->list = x;
 	return y;	//return pointer to the iterator
